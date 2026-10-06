@@ -1,5 +1,6 @@
 package tn.esprit.autolocapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "vehicule")
@@ -33,4 +36,48 @@ public class Vehicule {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatutVehicule statut;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "agence_id", nullable = false)
+    private Agence agence;
+
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Maintenance> maintenances = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "vehicule_equipement",
+            joinColumns = @JoinColumn(name = "vehicule_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "equipement_id", nullable = false),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"vehicule_id", "equipement_id"})
+    )
+    @JsonIgnore
+    private List<Equipement> equipements = new ArrayList<>();
+
+    public void addMaintenance(Maintenance m) {
+        maintenances.add(m);
+        m.setVehicule(this);
+    }
+
+    public void removeMaintenance(Maintenance m) {
+        maintenances.remove(m);
+        m.setVehicule(null);
+    }
+
+    public void addEquipement(Equipement e) {
+        equipements.add(e);
+        e.getVehicules().add(this);
+    }
+
+    public void removeEquipement(Equipement e) {
+        equipements.remove(e);
+        e.getVehicules().remove(this);
+    }
 }
