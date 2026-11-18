@@ -19,28 +19,21 @@ import java.util.List;
 @AllArgsConstructor
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long idClient;
-    @Column(nullable = false, length = 50)
+    @Column( nullable = false , length = 50)
     private String nom;
-    @Column(nullable = false, length = 50)
+    @Column( nullable = false , length = 50)
     private String prenom;
-    @Column(nullable = false, unique = true, length = 100)
+    @Column( nullable = false , length = 250)
     private String email;
-    @Column(nullable = false, length = 20)
+    @Column( nullable = false , length = 50)
     private String telephone;
-    @Column(nullable = false, unique = true, length = 30)
+    @Column( nullable = false , length = 50)
     private String numPermis;
-    @Column(nullable = false)
+    @Column( nullable = false )
     private LocalDate dateInscription;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonIgnore
-    private List<Reservation> reservations = new ArrayList<>();
-
-    public void addReservation(Reservation r) {
-        reservations.add(r);
-        r.setClient(this);
-    }
+    @OneToMany(mappedBy = "client",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    List<Reservation> Reservations;
 }

@@ -9,21 +9,26 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
 @Entity
+@Table(name = "paiement")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Paiement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long idPaiement;
-    BigDecimal montant;
-    LocalDate datePaiement;
-    ModePaiement modePaiement;
+    private Long idPaiement;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "contrat_id", nullable = false)
+    private BigDecimal montant;
+    private LocalDate datePaiement;
+
+    @Enumerated(EnumType.STRING)
+    private ModePaiement modePaiement;
+
+    @ManyToOne
+    @JoinColumn(name = "contrat_id")
     @JsonIgnore
     private Contrat contrat;
 }

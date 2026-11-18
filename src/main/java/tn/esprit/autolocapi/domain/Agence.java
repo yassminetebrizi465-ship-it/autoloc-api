@@ -29,24 +29,12 @@ public class Agence {
     @Column(nullable = false, length = 20)
     private String telephone;
 
-    @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "agence", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Employe> employes = new ArrayList<>();
+    private List<Employe> employes;
 
-    @OneToMany(mappedBy = "agence", fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "agence",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Vehicule> vehicules = new ArrayList<>();
-
-    public void addEmploye(Employe e) {
-        employes.add(e);
-        e.setAgence(this);
-    }
-
-    public void addVehicule(Vehicule v) {
-        vehicules.add(v);
-        v.setAgence(this);
-    }
+    private List<Vehicule> vehicules;
 
 }

@@ -1,12 +1,9 @@
 package tn.esprit.autolocapi.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autolocapi.domain.Vehicule;
-import tn.esprit.autolocapi.service.IContartService;
 import tn.esprit.autolocapi.service.IVehiculeService;
-import tn.esprit.autolocapi.service.IVehiculeServiceImp;
 
 import java.util.List;
 

@@ -22,29 +22,13 @@ public class Contrat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContrat;
-    @Column(nullable = false)
-    private LocalDate dateSignature;
-    @Column(nullable = false, precision = 10, scale = 2)
+
+    private  LocalDate dateSignature;
     private BigDecimal montantTotal;
-    @Column(nullable = false)
-    private boolean valide;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reservation_id", nullable = false, unique = true)
+    private  Boolean valide ;
+    @OneToOne
+    @JoinColumn(name = "reservation_id")
     private Reservation reservation;
-
-    @OneToMany(mappedBy = "contrat", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Paiement> paiements = new ArrayList<>();
-
-    public void addPaiement(Paiement p) {
-        paiements.add(p);
-        p.setContrat(this);
-    }
-
-    public void removePaiement(Paiement p) {
-        paiements.remove(p);
-        p.setContrat(null);
-    }
+    @OneToMany(mappedBy = "contrat",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    List<Paiement> paiements;
 }
